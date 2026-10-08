@@ -2,6 +2,8 @@
 
 A portfolio prototype for **fictional EV service requests**. It combines a FastAPI triage workflow, local vector retrieval, optional OpenAI generation, Langfuse tracing, a 50-case golden dataset, Promptfoo pull-request checks, scheduled DeepEval reports, and a Streamlit supervisor playground.
 
+[Read the published documentation](https://krishal743.github.io/Enterprise-PromptOps-AI-Enablement-Harness/).
+
 The recommendation is always reviewed before a **simulated** work order is dispatched. No real vehicle diagnostics, customer records, or field-team integrations are included.
 
 ## Quick start
@@ -64,7 +66,7 @@ The Promptfoo CI job runs on relevant pull requests and fails if a golden assert
 - [Architecture and decisions](docs/architecture.md)
 - [Prompt library](prompts/templates)
 
-`mkdocs.yml` builds these Markdown pages into a documentation site. The `Publish documentation` workflow deploys it to GitHub Pages after the repository is connected to GitHub and Pages is enabled.
+`mkdocs.yml` builds these Markdown pages into a documentation site. The `Publish documentation` workflow deploys it to GitHub Pages on changes to `main`.
 
 ## Limits
 
