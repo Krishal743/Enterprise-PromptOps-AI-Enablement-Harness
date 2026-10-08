@@ -55,7 +55,11 @@ def test_critical_report_cannot_be_downgraded(tmp_path, monkeypatch):
 
 def test_unknown_report_needs_human_review(tmp_path, monkeypatch):
     monkeypatch.setenv("OPS_DB_PATH", str(tmp_path / "ops.db"))
-    monkeypatch.setenv("OPS_LLM_PROVIDER", "mock")
+
+    def unexpected_generate(*args):
+        raise AssertionError("No article must skip the model")
+
+    monkeypatch.setattr("ops_ai.service.generate", unexpected_generate)
     response = client.post(
         "/v1/triage",
         json={
@@ -65,6 +69,8 @@ def test_unknown_report_needs_human_review(tmp_path, monkeypatch):
     )
     assert response.status_code == 200
     assert response.json()["recommended_team"] == "human_review"
+    assert response.json()["priority"] == "routine"
+    assert response.json()["evidence"] == []
 
 
 def test_unretrieved_citation_forces_review(tmp_path, monkeypatch):

@@ -105,13 +105,16 @@ def triage(
                 docs = docs[:3]
             if span is not None:
                 span.update(output=[doc["id"] for doc in docs])
-        try:
-            draft = generate(ticket, docs, prompt)
-            draft = validate_draft(draft, docs, hazard)
-        except (ValueError, RuntimeError) as error:
-            draft = validate_draft(
-                safe_fallback(f"Generation failed: {type(error).__name__}"), docs, hazard
-            )
+        if not docs:
+            draft = safe_fallback("No relevant knowledge article was found.")
+        else:
+            try:
+                draft = generate(ticket, docs, prompt)
+                draft = validate_draft(draft, docs, hazard)
+            except (ValueError, RuntimeError) as error:
+                draft = validate_draft(
+                    safe_fallback(f"Generation failed: {type(error).__name__}"), docs, hazard
+                )
         with observation(
             "validated-recommendation", {"retrieval_ids": [doc["id"] for doc in docs]}
         ) as span:
