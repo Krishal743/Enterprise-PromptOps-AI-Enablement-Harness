@@ -15,7 +15,7 @@ st.caption("Fictional service requests · Recommendations require supervisor app
 
 def call(method: str, path: str, data: dict | None = None):
     try:
-        response = httpx.request(method, f"{API}{path}", json=data, timeout=60)
+        response = httpx.request(method, f"{API}{path}", json=data, timeout=300)
         response.raise_for_status()
         return response.json()
     except (httpx.RequestError, httpx.HTTPStatusError) as error:

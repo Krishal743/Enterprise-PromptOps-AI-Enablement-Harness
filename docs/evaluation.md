@@ -4,7 +4,7 @@
 
 `data/golden.json` contains 50 fictional cases: 12 routine, 8 ambiguous, 8 safety-sensitive, 7 missing-evidence, 5 tone, 5 injection, and 5 out-of-scope. Each case states the expected team, priority, source, review flag, and an example acceptable reply. The example reply guides human review; automated checks do not require exact wording. These labels are hypotheses for a prototype, not an Ather policy.
 
-`python -m scripts.validate_assets` checks count, IDs, source references, and exact diagnostic-code retrieval. `python -m eval.build_promptfoo_cases` compiles those records into Promptfoo tests. Unit tests cover retrieval and API behavior. Promptfoo evaluates the live model and the full triage path on pull requests. It applies exact assertions to all cases and a model-graded groundedness rubric to cases with a reference article. Any failed assertion fails that PR job. The report artifact includes case-level reasons.
+`python -m scripts.validate_assets` checks count, IDs, source references, and exact diagnostic-code retrieval. `python -m eval.build_promptfoo_cases` compiles those records into Promptfoo tests. Unit tests cover retrieval and API behavior. On pull requests, Promptfoo runs exact assertions on all 50 cases using the mock provider and runs one live Ollama case per category with the full triage path and a groundedness rubric where a reference article exists. This live sample can detect prompt changes; the mock suite alone cannot. Any failed assertion fails the PR job. The report artifact includes case-level reasons. Run the full 50-case live suite locally before a major prompt release.
 
 ## What the scores mean
 
@@ -16,16 +16,18 @@
 - **DeepEval faithfulness:** checks whether claims align with retrieved articles; used as the groundedness check.
 - **DeepEval contextual recall:** checks whether retrieval supplied the information needed for the expected answer.
 
-DeepEval runs weekly or on demand for evidence-backed cases. Its scores are diagnostic, not an automatic dispatch decision. Review a sample of traces and disagreements by hand.
+DeepEval runs weekly or on demand for a small category-balanced group of evidence-backed cases. Its scores are diagnostic, not an automatic dispatch decision. Review a sample of traces and disagreements by hand.
 
 ## Run locally
 
 ```bash
 python -m scripts.validate_assets
 python -m pytest -q
+python -m eval.build_promptfoo_cases --mode structural
+OPS_LLM_PROVIDER=mock npx --yes promptfoo@0.124.0 eval -c promptfooconfig.yaml --no-cache
 python -m eval.build_promptfoo_cases
-OPS_LLM_PROVIDER=openai OPENAI_API_KEY=... npx --yes promptfoo@0.124.0 eval -c promptfooconfig.yaml --no-cache
-OPS_LLM_PROVIDER=openai OPENAI_API_KEY=... python -m eval.deepeval_suite --limit 10
+OPS_LLM_PROVIDER=ollama REQUEST_TIMEOUT_MS=300000 npx --yes promptfoo@0.124.0 eval -c promptfooconfig.yaml --no-cache --max-concurrency 1
+OPS_LLM_PROVIDER=ollama python -m eval.deepeval_suite --limit 5
 ```
 
 The `mock` provider is for offline functional testing. It does not measure prompt quality because its response is deterministic and does not read the prompt.

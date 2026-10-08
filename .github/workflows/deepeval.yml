@@ -11,18 +11,22 @@ permissions:
 jobs:
   judge:
     runs-on: ubuntu-latest
+    timeout-minutes: 120
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
       - run: python -m pip install -e '.[eval]'
+      - name: Start local model
+        run: bash scripts/start_ollama_ci.sh
       - name: Evaluate evidence-backed cases
         env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          OPS_LLM_PROVIDER: openai
-          OPS_MODEL: gpt-4o-mini
-        run: python -m eval.deepeval_suite --limit 20
+          OPS_LLM_PROVIDER: ollama
+          OPS_MODEL: qwen3:4b
+          OPS_EVAL_MODEL: qwen3:4b
+          OPS_OLLAMA_HOST: http://127.0.0.1:11434
+        run: python -m eval.deepeval_suite --limit 5
       - uses: actions/upload-artifact@v4
         if: always()
         with:

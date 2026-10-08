@@ -41,4 +41,4 @@ npx --yes promptfoo@0.124.0 --version
 .venv/bin/mkdocs build --strict
 
 echo "Bootstrap complete. Activate with: source .venv/bin/activate"
-echo "Live evaluations require OPENAI_API_KEY and OPS_LLM_PROVIDER=openai."
+echo "Live local evaluations need a running Ollama server with qwen3:4b; no model API key is required."

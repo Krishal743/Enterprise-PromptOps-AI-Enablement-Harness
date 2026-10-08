@@ -46,6 +46,6 @@ Open the `triage-request` trace for a ticket ID or session. The retrieval step s
 |---|---|---|
 | No evidence | No article matched | Check the code and ask for missing details. |
 | Wrong team | Similar symptom matched another article | Add a case and review retrieval terms. |
-| Model error | Missing API key or provider failure | Check service logs and provider settings; the request should fall back to review. |
+| Model error | Ollama is stopped, its model is missing, or an optional API provider failed | Check the model service and provider settings; the request should fall back to review. |
 | No Langfuse trace | Tracing keys absent or exporter failed | Check `LANGFUSE_PUBLIC_KEY`, `LANGFUSE_SECRET_KEY`, and host setting. |
 | CI fails | At least one expected behavior changed | Open the evaluation artifact and inspect each failed case. |

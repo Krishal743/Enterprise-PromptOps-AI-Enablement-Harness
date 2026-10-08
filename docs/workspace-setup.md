@@ -28,23 +28,23 @@ bash scripts/bootstrap.sh
 
 This creates `.venv`, installs all Python extras, fetches the pinned Promptfoo CLI, validates the dataset, runs unit tests, generates Promptfoo cases, compiles Python modules, and builds the documentation. Re-run the command when dependency requirements change.
 
-Copy `.env.example` to `.env` for local settings. Keep `.env` private. The mock provider runs without an API key. For live prompt evaluation, set `OPS_LLM_PROVIDER=openai` and `OPENAI_API_KEY` in your shell or a private secret store. Add Langfuse keys only when you intend to send traces. Do not commit credentials.
+Copy `.env.example` to `.env` for local settings, or run `python -m scripts.prepare_local_stack` to create private Ollama and Langfuse settings. The mock provider runs without an API key. Ollama is the default live option and needs no model API key. OpenAI remains optional. Keep `.env` private; never commit credentials. See the [local stack guide](local-stack.md).
 
 ## Check live evaluations
 
-After bootstrap and credentials are ready:
+After bootstrap and Ollama is running with `qwen3:4b` downloaded:
 
 ```bash
 source .venv/bin/activate
 python -m eval.build_promptfoo_cases
-OPS_LLM_PROVIDER=openai npx --yes promptfoo@0.124.0 eval -c promptfooconfig.yaml --no-cache
-OPS_LLM_PROVIDER=openai python -m eval.deepeval_suite --limit 10
+OPS_LLM_PROVIDER=ollama npx --yes promptfoo@0.124.0 eval -c promptfooconfig.yaml --no-cache --max-concurrency 1
+OPS_LLM_PROVIDER=ollama python -m eval.deepeval_suite --limit 5
 ```
 
-These checks make paid model calls. Inspect failures before making a claim about accuracy or regression prevention.
+These checks use local compute. Inspect failures before making a claim about accuracy or regression prevention.
 
 ## Publish to GitHub
 
-Authenticate GitHub in an internet-enabled terminal with `gh auth login -h github.com`; check with `gh auth status`. The repository is `https://github.com/Krishal743/Enterprise-PromptOps-AI-Enablement-Harness.git`. If Codex protects the current checkout's `.git` directory, clone the repository into a normal writable checkout before committing. Review the diff and push without forcing. In GitHub repository settings, add `OPENAI_API_KEY` as an Actions secret before expecting the live Promptfoo and DeepEval jobs to pass. The documentation site uses GitHub Pages with **GitHub Actions** as its publishing source.
+Authenticate GitHub in an internet-enabled terminal with `gh auth login -h github.com`; check with `gh auth status`. The repository is `https://github.com/Krishal743/Enterprise-PromptOps-AI-Enablement-Harness.git`. If Codex protects the current checkout's `.git` directory, clone the repository into a normal writable checkout before committing. Review the diff and push without forcing. The Ollama Promptfoo and DeepEval workflows require no API secrets. The documentation site uses GitHub Pages with **GitHub Actions** as its publishing source.
 
 After pushing, open the Actions tab and check the AI quality gates, documentation build, and scheduled evaluation workflow. A successful local bootstrap alone does not verify the hosted workflows.

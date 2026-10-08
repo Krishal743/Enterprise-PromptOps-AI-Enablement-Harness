@@ -6,6 +6,7 @@ nav:
   - Home: index.md
   - Supervisor runbook: runbook.md
   - Workspace setup: workspace-setup.md
+  - Local AI and observability: local-stack.md
   - Evaluation guide: evaluation.md
   - Architecture: architecture.md
   - Design specification: superpowers/specs/2026-10-08-ev-service-triage-design.md

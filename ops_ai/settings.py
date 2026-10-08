@@ -18,8 +18,8 @@ PROMPTS_PATH = ROOT / "prompts"
 
 def provider_name() -> str:
     value = os.getenv("OPS_LLM_PROVIDER", "mock").lower()
-    if value not in {"mock", "openai"}:
-        raise ValueError("OPS_LLM_PROVIDER must be 'mock' or 'openai'")
+    if value not in {"mock", "openai", "ollama"}:
+        raise ValueError("OPS_LLM_PROVIDER must be 'mock', 'openai', or 'ollama'")
     return value
 
 

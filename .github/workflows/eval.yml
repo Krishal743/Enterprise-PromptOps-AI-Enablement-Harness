@@ -8,8 +8,10 @@ on:
       - "prompts/**"
       - "eval/**"
       - "tests/**"
+      - "scripts/**"
       - "pyproject.toml"
       - "promptfooconfig.yaml"
+      - "compose.yaml"
       - ".github/workflows/eval.yml"
   workflow_dispatch:
 
@@ -19,6 +21,7 @@ permissions:
 jobs:
   regression:
     runs-on: ubuntu-latest
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -35,26 +38,34 @@ jobs:
         run: |
           ruff check .
           ruff format --check .
-      - name: Build Promptfoo cases
-        run: python -m eval.build_promptfoo_cases
-      - name: Require evaluation credential
+      - name: Build structural golden cases
+        run: python -m eval.build_promptfoo_cases --mode structural
+      - name: Promptfoo structural regression
         env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-        run: test -n "$OPENAI_API_KEY"
-      - name: Promptfoo golden regression
-        env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          OPS_LLM_PROVIDER: openai
-          OPS_MODEL: gpt-4o-mini
+          OPS_LLM_PROVIDER: mock
           PROMPTFOO_PYTHON: python
           PROMPTFOO_DISABLE_TELEMETRY: "1"
-        run: npx --yes promptfoo@0.124.0 eval -c promptfooconfig.yaml --no-cache --max-concurrency 3 -o eval-results.json -o eval-results.html
+        run: npx --yes promptfoo@0.124.0 eval -c promptfooconfig.yaml --no-cache --max-concurrency 3 -o eval-results-structural.json -o eval-results-structural.html
+      - name: Start local model
+        run: bash scripts/start_ollama_ci.sh
+      - name: Build sampled live golden cases
+        run: python -m eval.build_promptfoo_cases --sample-per-type 1
+      - name: Promptfoo live prompt regression
+        env:
+          OPS_LLM_PROVIDER: ollama
+          OPS_MODEL: qwen3:4b
+          OPS_OLLAMA_HOST: http://127.0.0.1:11434
+          OPS_EVAL_JUDGE: ollama:chat:qwen3:4b
+          REQUEST_TIMEOUT_MS: "300000"
+          PROMPTFOO_PYTHON: python
+          PROMPTFOO_DISABLE_TELEMETRY: "1"
+        run: npx --yes promptfoo@0.124.0 eval -c promptfooconfig.yaml --no-cache --max-concurrency 1 -o eval-results-live.json -o eval-results-live.html
       - name: Upload evaluation report
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: ai-eval-report
           path: |
-            eval-results.json
-            eval-results.html
+            eval-results-*.json
+            eval-results-*.html
           if-no-files-found: ignore

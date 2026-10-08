@@ -4,10 +4,12 @@ services:
     env_file: .env
     environment:
       OPS_DB_PATH: /app/.data/ops.db
+      OPS_OLLAMA_HOST: http://ollama:11434
+      LANGFUSE_BASE_URL: ${LANGFUSE_DOCKER_BASE_URL:-https://cloud.langfuse.com}
     volumes:
       - ops_data:/app/.data
     ports:
-      - "8000:8000"
+      - "127.0.0.1:8000:8000"
   playground:
     build: .
     command: ["streamlit", "run", "playground.py", "--server.address", "0.0.0.0", "--server.port", "8501"]
@@ -17,7 +19,15 @@ services:
     depends_on:
       - api
     ports:
-      - "8501:8501"
+      - "127.0.0.1:8501:8501"
+  ollama:
+    image: ollama/ollama:0.40.1
+    profiles: [local-ai]
+    volumes:
+      - ollama_data:/root/.ollama
+    ports:
+      - "127.0.0.1:11434:11434"
 
 volumes:
   ops_data:
+  ollama_data:

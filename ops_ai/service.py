@@ -54,6 +54,7 @@ def validate_draft(draft: TriageDraft, documents: list[dict], hazard: dict | Non
     ):
         draft = safe_fallback("The cited evidence did not support the recommended team.")
     elif cited:
+        draft.category = cited[0]["title"].lower()
         required = max(
             (Priority(doc["priority"]) for doc in cited), key=lambda priority: RANK[priority]
         )
