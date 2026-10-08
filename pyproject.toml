@@ -1,0 +1,34 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "enterprise-ai-ops"
+version = "0.1.0"
+description = "Simulated EV service triage with observable LLM evaluations"
+requires-python = ">=3.11"
+dependencies = [
+  "fastapi>=0.115,<1",
+  "uvicorn>=0.30,<1",
+  "pydantic>=2.8,<3",
+  "openai>=1.100,<3",
+  "langfuse>=4.7,<5",
+  "httpx>=0.27,<1",
+  "python-dotenv>=1,<2",
+]
+
+[project.optional-dependencies]
+playground = ["streamlit>=1.39,<2"]
+eval = ["deepeval>=3,<4"]
+dev = ["pytest>=8,<10", "ruff>=0.8,<1"]
+docs = ["mkdocs>=1.6,<2"]
+
+[tool.setuptools.packages.find]
+include = ["ops_ai*"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

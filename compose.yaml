@@ -1,0 +1,23 @@
+services:
+  api:
+    build: .
+    env_file: .env
+    environment:
+      OPS_DB_PATH: /app/.data/ops.db
+    volumes:
+      - ops_data:/app/.data
+    ports:
+      - "8000:8000"
+  playground:
+    build: .
+    command: ["streamlit", "run", "playground.py", "--server.address", "0.0.0.0", "--server.port", "8501"]
+    env_file: .env
+    environment:
+      OPS_API_URL: http://api:8000
+    depends_on:
+      - api
+    ports:
+      - "8501:8501"
+
+volumes:
+  ops_data:

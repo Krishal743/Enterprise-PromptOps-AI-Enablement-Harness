@@ -1,0 +1,11 @@
+site_name: EV Service Triage Lab
+site_description: Plain-language guide for a fictional AI service triage prototype
+theme:
+  name: mkdocs
+nav:
+  - Home: index.md
+  - Supervisor runbook: runbook.md
+  - Workspace setup: workspace-setup.md
+  - Evaluation guide: evaluation.md
+  - Architecture: architecture.md
+  - Design specification: superpowers/specs/2026-10-08-ev-service-triage-design.md

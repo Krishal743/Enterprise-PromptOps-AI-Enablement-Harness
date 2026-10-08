@@ -1,0 +1,31 @@
+name: DeepEval quality review
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 6 * * 1"
+
+permissions:
+  contents: read
+
+jobs:
+  judge:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install -e '.[eval]'
+      - name: Evaluate evidence-backed cases
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPS_LLM_PROVIDER: openai
+          OPS_MODEL: gpt-4o-mini
+        run: python -m eval.deepeval_suite --limit 20
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: deepeval-report
+          path: eval-results-deepeval.json
+          if-no-files-found: ignore

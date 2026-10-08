@@ -1,0 +1,6 @@
+description: EV service triage golden regression suite
+prompts:
+  - file://prompts/triage_v2.txt
+providers:
+  - file://eval/provider.py
+tests: file://eval/promptfoo_cases.json

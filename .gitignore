@@ -1,0 +1,15 @@
+.venv/
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+.deepeval/
+*.egg-info/
+.data/
+.env
+.promptfoo/
+node_modules/
+site/
+eval-results*.json
+eval-results*.html
+enterprise-promptops-source.tar.gz
+eval/promptfoo_cases.json
