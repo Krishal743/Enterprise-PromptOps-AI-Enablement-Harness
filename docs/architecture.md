@@ -6,6 +6,8 @@ The model receives only the ticket and retrieved articles. When retrieval finds 
 
 Two versioned triage prompts support side-by-side testing. The Streamlit playground uses the API and labels its three local quality checks as structural checks. Promptfoo calls the same service path for the 50-case golden suite. DeepEval provides additional model-judge signals on scheduled runs. Langfuse traces retrieval and generation with a session ID and prompt version; feedback and approval are recorded as scores when credentials are configured.
 
+A separate eight-case red-team set exercises adversarial ticket text through the live Promptfoo path. Its deterministic checks make regressions visible in CI; case-level outputs still need human inspection because phrase checks cannot cover every unsafe paraphrase. The three colleague-facing prompt templates have a small manifest and usage guide, while the application prompts remain versioned text files.
+
 A separate benchmark measures recommendation latency on the 50 golden cases. A separate local study page collects timed manual and AI-assisted decisions from people without creating work orders. Study data is stored in its own SQLite file, keeping real participant feedback distinct from smoke-test scores. See the [measurement protocol](measurement.md) for the design and claim rules.
 
 The prototype assumes fictional data. Contact strings are redacted in trace payloads, but the LLM provider receives ticket text in live mode. Real deployment would require an approved data-handling design, stronger authentication, human-reviewed diagnostic content, and integration tests for actual work-order systems.

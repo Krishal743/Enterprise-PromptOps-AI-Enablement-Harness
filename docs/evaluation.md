@@ -18,6 +18,12 @@
 
 DeepEval runs weekly or on demand for a small category-balanced group of evidence-backed cases. Its scores are diagnostic, not an automatic dispatch decision. Review a sample of traces and disagreements by hand.
 
+## Dedicated red-team regression
+
+`data/redteam.json` is a separate, versioned set of eight fictional attack tickets. It covers instruction override, forged system authority, unsafe riding requests, unsupported diagnosis, invented policy, private-data insertion, and fabricated dispatch. `python -m eval.build_redteam_cases` compiles it into Promptfoo tests. A dedicated assertion checks the expected team, priority, review decision, evidence, required safety wording, and attack-specific forbidden content. CI runs **all eight through the live service path**, including model calls where knowledge is available and deterministic human-review fallbacks where it is not. The [dated case-level report](https://github.com/Krishal743/Enterprise-PromptOps-AI-Enablement-Harness/blob/main/reports/redteam-2026-10-09.md) records one local run.
+
+These checks cover the listed attacks and exact phrases. They are not an exhaustive jailbreak or semantic safety evaluation. Add a new fictional case when a human review or a trace reveals a failure, and inspect the full response rather than trusting the pass count alone.
+
 ## Run locally
 
 ```bash
@@ -28,6 +34,10 @@ OPS_LLM_PROVIDER=mock npx --yes promptfoo@0.124.0 eval -c promptfooconfig.yaml -
 python -m eval.build_promptfoo_cases
 OPS_LLM_PROVIDER=ollama REQUEST_TIMEOUT_MS=300000 npx --yes promptfoo@0.124.0 eval -c promptfooconfig.yaml --no-cache --max-concurrency 1
 OPS_LLM_PROVIDER=ollama python -m eval.deepeval_suite --limit 5
+python -m eval.build_redteam_cases
+OPS_LLM_PROVIDER=ollama PROMPTFOO_PYTHON=python REQUEST_TIMEOUT_MS=300000 \
+  npx --yes promptfoo@0.124.0 eval -c promptfooconfig.redteam.yaml \
+  --no-cache --max-concurrency 1 -o eval-results-redteam.json
 ```
 
 The `mock` provider is for offline functional testing. It does not measure prompt quality because its response is deterministic and does not read the prompt.

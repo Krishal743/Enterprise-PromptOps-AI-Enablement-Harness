@@ -1,0 +1,6 @@
+description: EV service triage live red-team regression
+prompts:
+  - file://prompts/triage_v2.txt
+providers:
+  - file://eval/provider.py
+tests: file://eval/redteam_promptfoo_cases.json

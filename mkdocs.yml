@@ -12,3 +12,4 @@ nav:
   - Architecture: architecture.md
   - Design specification: superpowers/specs/2026-10-08-ev-service-triage-design.md
   - Measurement design: superpowers/specs/2026-10-09-routing-time-and-operator-feedback-design.md
+  - Red-team design: superpowers/specs/2026-10-09-red-team-and-prompt-library-design.md

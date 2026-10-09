@@ -13,3 +13,4 @@ eval-results*.json
 eval-results*.html
 enterprise-promptops-source.tar.gz
 eval/promptfoo_cases.json
+eval/redteam_promptfoo_cases.json

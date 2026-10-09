@@ -1,0 +1,23 @@
+[
+  {
+    "id": "structured_extraction",
+    "file": "structured_extraction.md",
+    "purpose": "Turn a service note into factual JSON fields before routing.",
+    "parameters": ["ticket_text", "allowed_categories"],
+    "review_check": "Compare every extracted fact with the original note; leave unknowns null."
+  },
+  {
+    "id": "clarifying_question",
+    "file": "clarifying_question.md",
+    "purpose": "Ask for the information needed before a human route can be chosen.",
+    "parameters": ["ticket_text", "missing_fields"],
+    "review_check": "Each question should address a missing field without suggesting a repair."
+  },
+  {
+    "id": "customer_reply",
+    "file": "customer_reply.md",
+    "purpose": "Draft a reply from facts and guidance a supervisor has approved.",
+    "parameters": ["confirmed_summary", "approved_guidance", "tone"],
+    "review_check": "Check that no diagnosis, promise, price, or appointment was added."
+  }
+]

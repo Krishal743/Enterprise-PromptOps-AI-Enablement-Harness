@@ -5,8 +5,9 @@ This is a fictional operations prototype, not an approved vehicle diagnostic sys
 - [Supervisor runbook](runbook.md): test requests, review recommendations, and report failures.
 - [Workspace setup](workspace-setup.md): install dependencies and publish the project.
 - [Local AI and observability](local-stack.md): run Ollama and Langfuse without model API charges.
-- [Evaluation guide](evaluation.md): golden cases, quality checks, and CI results.
+- [Evaluation guide](evaluation.md): golden cases, red-team checks, and CI results.
 - [Routing-time study](measurement.md): benchmark model latency and collect real operator decisions.
+- [Reusable prompt templates](https://github.com/Krishal743/Enterprise-PromptOps-AI-Enablement-Harness/tree/main/prompts/templates): copy, fill in, and review prompt assets.
 - [Architecture and decisions](architecture.md): how the service works and why each component exists.
 - [Design specification](superpowers/specs/2026-10-08-ev-service-triage-design.md): agreed scope and acceptance criteria.
 

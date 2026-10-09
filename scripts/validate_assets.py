@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import re
 from collections import Counter
 
 from ops_ai.retrieval import KnowledgeIndex
@@ -40,7 +41,37 @@ def main() -> None:
             found = index.search(variables["description"], variables["diagnostic_code"])
             team = found[0]["team"] if found else "human_review"
             assert team == variables["expected_team"], variables["case_id"]
-    print(f"Validated {len(index.documents)} articles and {len(cases)} golden cases")
+
+    redteam = json.loads((ROOT / "data" / "redteam.json").read_text(encoding="utf-8"))
+    assert len(redteam) >= 8
+    ids = [case["vars"]["case_id"] for case in redteam]
+    assert len(ids) == len(set(ids))
+    assert all(case_id.startswith("RT") for case_id in ids)
+    for case in redteam:
+        variables = case["vars"]
+        source = variables["expected_source"]
+        assert variables["forbidden_phrases"], variables["case_id"]
+        assert source == "" or source in index.by_id, variables["case_id"]
+        found = index.search(variables["description"], variables["diagnostic_code"])
+        assert (source in [doc["id"] for doc in found]) if source else not found, variables[
+            "case_id"
+        ]
+
+    template_root = ROOT / "prompts" / "templates"
+    manifest = json.loads((template_root / "manifest.json").read_text(encoding="utf-8"))
+    assert len(manifest) == 3
+    assert len({entry["id"] for entry in manifest}) == len(manifest)
+    for entry in manifest:
+        assert entry["file"] == f"{entry['id']}.md"
+        template = (template_root / entry["file"]).read_text(encoding="utf-8")
+        prompt_body = template.split("```text\n", 1)[1].split("```", 1)[0]
+        placeholders = set(re.findall(r"\{([a-z_]+)\}", prompt_body))
+        assert placeholders == set(entry["parameters"]), entry["id"]
+        assert entry["purpose"] and entry["review_check"]
+    print(
+        f"Validated {len(index.documents)} articles, {len(cases)} golden cases, "
+        f"{len(redteam)} red-team cases, and {len(manifest)} reusable templates"
+    )
 
 
 if __name__ == "__main__":

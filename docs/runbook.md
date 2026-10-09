@@ -34,6 +34,8 @@ Open the local [routing study](measurement.md) at <http://127.0.0.1:8502> if the
 
 ## Change a prompt safely
 
+For a new colleague workflow, start with the [reusable template guide](https://github.com/Krishal743/Enterprise-PromptOps-AI-Enablement-Harness/blob/main/prompts/templates/README.md). Each template lists the values to fill in and a human check for the result. These templates are copy-and-adapt examples; the triage app uses the versioned prompts below.
+
 1. Copy `prompts/triage_v2.txt` to the next version name and change one behavior at a time.
 2. Add the version to the playground comparison and evaluation configuration when promoting it.
 3. Include one example that motivated the change and one new golden case for the failure it fixes.

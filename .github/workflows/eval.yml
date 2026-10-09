@@ -11,6 +11,7 @@ on:
       - "scripts/**"
       - "pyproject.toml"
       - "promptfooconfig.yaml"
+      - "promptfooconfig.redteam.yaml"
       - "compose.yaml"
       - "Dockerfile"
       - ".dockerignore"
@@ -35,6 +36,8 @@ jobs:
           node-version: "24"
       - name: Install Python package
         run: python -m pip install -e '.[dev]'
+      - name: Validate versioned datasets and templates
+        run: python -m scripts.validate_assets
       - name: Unit tests
         run: python -m pytest -q
       - name: Lint and format
@@ -63,6 +66,17 @@ jobs:
           PROMPTFOO_PYTHON: python
           PROMPTFOO_DISABLE_TELEMETRY: "1"
         run: npx --yes promptfoo@0.124.0 eval -c promptfooconfig.yaml --no-cache --max-concurrency 1 -o eval-results-live.json -o eval-results-live.html
+      - name: Build dedicated red-team cases
+        run: python -m eval.build_redteam_cases
+      - name: Promptfoo live red-team regression
+        env:
+          OPS_LLM_PROVIDER: ollama
+          OPS_MODEL: qwen3:4b
+          OPS_OLLAMA_HOST: http://127.0.0.1:11434
+          REQUEST_TIMEOUT_MS: "300000"
+          PROMPTFOO_PYTHON: python
+          PROMPTFOO_DISABLE_TELEMETRY: "1"
+        run: npx --yes promptfoo@0.124.0 eval -c promptfooconfig.redteam.yaml --no-cache --max-concurrency 1 -o eval-results-redteam.json -o eval-results-redteam.html
       - name: Upload evaluation report
         if: always()
         uses: actions/upload-artifact@v4
