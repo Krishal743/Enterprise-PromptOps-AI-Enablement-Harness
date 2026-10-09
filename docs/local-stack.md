@@ -18,7 +18,7 @@ docker compose -f compose.yaml -f compose.langfuse.yaml --profile local-ai ps
 
 The preparation script creates or updates the ignored `.env` file with random local database passwords, a Langfuse project key pair, and an initial login password. Re-running it preserves generated secrets. Read `LANGFUSE_ADMIN_PASSWORD` privately from `.env` and sign in at <http://127.0.0.1:3000> as `operator@example.invalid`. Do not commit or share `.env`.
 
-Open the playground at <http://127.0.0.1:8501> and the API documentation at <http://127.0.0.1:8000/docs>. The model listens at <http://127.0.0.1:11434>. All published ports bind to the loopback interface because this prototype does not authenticate API or playground users.
+Open the playground at <http://127.0.0.1:8501>, the timed operator study at <http://127.0.0.1:8502>, and the API documentation at <http://127.0.0.1:8000/docs>. The model listens at <http://127.0.0.1:11434>. All published ports bind to the loopback interface because this prototype does not authenticate API, playground, or study users. See the [measurement protocol](measurement.md) before recruiting participants.
 
 ## Verify a full request
 

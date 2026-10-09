@@ -6,6 +6,7 @@ This is a fictional operations prototype, not an approved vehicle diagnostic sys
 - [Workspace setup](workspace-setup.md): install dependencies and publish the project.
 - [Local AI and observability](local-stack.md): run Ollama and Langfuse without model API charges.
 - [Evaluation guide](evaluation.md): golden cases, quality checks, and CI results.
+- [Routing-time study](measurement.md): benchmark model latency and collect real operator decisions.
 - [Architecture and decisions](architecture.md): how the service works and why each component exists.
 - [Design specification](superpowers/specs/2026-10-08-ev-service-triage-design.md): agreed scope and acceptance criteria.
 

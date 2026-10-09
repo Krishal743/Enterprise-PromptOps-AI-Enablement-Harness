@@ -6,6 +6,8 @@ COPY ops_ai ./ops_ai
 COPY data ./data
 COPY prompts ./prompts
 COPY playground.py ./playground.py
+COPY study_playground.py ./study_playground.py
+COPY scripts/study_report.py ./scripts/study_report.py
 RUN python -m pip install --no-cache-dir -e '.[playground]'
 
 ENV OPS_LLM_PROVIDER=mock

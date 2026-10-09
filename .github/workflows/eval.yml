@@ -12,6 +12,9 @@ on:
       - "pyproject.toml"
       - "promptfooconfig.yaml"
       - "compose.yaml"
+      - "Dockerfile"
+      - ".dockerignore"
+      - "study_playground.py"
       - ".github/workflows/eval.yml"
   workflow_dispatch:
 

@@ -28,6 +28,10 @@ All examples are fictional. Enter no real customer names, phone numbers, address
 4. Run `python -m scripts.validate_assets` and the local tests before opening a pull request.
 5. Review the Promptfoo artifact attached to the pull request. A red result lists the failed case and check.
 
+## Help measure the workflow
+
+Open the local [routing study](measurement.md) at <http://127.0.0.1:8502> if the project owner invites you. Complete all 14 fictional tickets in one sitting. Some show an AI suggestion and others do not. Use the same reference articles in both cases, choose your own final route, and note where the suggestion was unhelpful. The study records your decision time but asks for no name or real customer details. A project owner must review the aggregate report before citing any time-saving result.
+
 ## Change a prompt safely
 
 1. Copy `prompts/triage_v2.txt` to the next version name and change one behavior at a time.

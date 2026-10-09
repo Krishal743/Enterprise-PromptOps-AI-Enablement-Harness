@@ -60,12 +60,19 @@ OPS_LLM_PROVIDER=ollama python -m eval.deepeval_suite --limit 5
 
 The Promptfoo CI job runs all 50 structural cases and one live Ollama case per category on relevant pull requests. No model API secret is needed. DeepEval runs weekly or on demand against a small category-balanced sample and writes a JSON report. The full 50-case model suite is available locally. Judge scores supplement exact routing and safety checks; they are not proof of correctness.
 
+## Measure routing time and operator feedback
+
+`OPS_LLM_PROVIDER=ollama python -m scripts.benchmark_routing` measures the service recommendation time on all 50 golden tickets after one warm-up. The separate study page at <http://127.0.0.1:8502> times manual and AI-assisted decisions from real participants and collects confidence, usefulness, and corrections. The [measurement guide](docs/measurement.md) shows how to export an aggregate report from Docker without names or comments, and explains the limits on impact claims.
+
+The recorded local run had a **9.61 s median** across 50 fictional tickets; 30 field-team recommendations took **10.18 s median**, and 20 no-evidence cases used a fast human-review fallback. Team, priority, and review flag matched the golden labels in all 50 cases. These are service timings, not measured human time savings.
+
 ## Documentation
 
 - [Supervisor runbook](docs/runbook.md)
 - [Workspace setup and publication](docs/workspace-setup.md)
 - [Local Ollama and Langfuse stack](docs/local-stack.md)
 - [Evaluation guide](docs/evaluation.md)
+- [Routing-time measurement and operator study](docs/measurement.md)
 - [Architecture and decisions](docs/architecture.md)
 - [Prompt library](prompts/templates)
 

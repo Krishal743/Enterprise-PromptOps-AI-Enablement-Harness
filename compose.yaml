@@ -20,6 +20,18 @@ services:
       - api
     ports:
       - "127.0.0.1:8501:8501"
+  study:
+    build: .
+    command: ["streamlit", "run", "study_playground.py", "--server.address", "0.0.0.0", "--server.port", "8502"]
+    env_file: .env
+    environment:
+      OPS_STUDY_DB_PATH: /app/.data/operator-study.db
+      OPS_OLLAMA_HOST: http://ollama:11434
+      LANGFUSE_BASE_URL: ${LANGFUSE_DOCKER_BASE_URL:-https://cloud.langfuse.com}
+    volumes:
+      - ops_data:/app/.data
+    ports:
+      - "127.0.0.1:8502:8502"
   ollama:
     image: ollama/ollama:0.40.1
     profiles: [local-ai]

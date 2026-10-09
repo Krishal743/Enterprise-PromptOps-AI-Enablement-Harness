@@ -1,0 +1,17 @@
+.git
+.env
+.venv
+.data
+.agents
+.aws
+.codex
+.pytest_cache
+.ruff_cache
+.deepeval
+__pycache__
+*.egg-info
+node_modules
+site
+eval-results*.json
+eval-results*.html
+enterprise-promptops-source.tar.gz

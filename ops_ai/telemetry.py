@@ -79,3 +79,20 @@ def record_approval(trace_id: str | None, approved: bool, note: str) -> None:
             data_type="BOOLEAN",
             comment=redact(note)[:500],
         )
+
+
+def record_study_feedback(trace_id: str | None, usefulness: int, team_corrected: bool) -> None:
+    client = langfuse_client()
+    if client is not None and trace_id:
+        client.create_score(
+            trace_id=trace_id,
+            name="operator_study_usefulness",
+            value=float(usefulness),
+            data_type="NUMERIC",
+        )
+        client.create_score(
+            trace_id=trace_id,
+            name="operator_study_team_corrected",
+            value=team_corrected,
+            data_type="BOOLEAN",
+        )

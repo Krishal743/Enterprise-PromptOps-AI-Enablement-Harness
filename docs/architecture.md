@@ -6,6 +6,8 @@ The model receives only the ticket and retrieved articles. When retrieval finds 
 
 Two versioned triage prompts support side-by-side testing. The Streamlit playground uses the API and labels its three local quality checks as structural checks. Promptfoo calls the same service path for the 50-case golden suite. DeepEval provides additional model-judge signals on scheduled runs. Langfuse traces retrieval and generation with a session ID and prompt version; feedback and approval are recorded as scores when credentials are configured.
 
+A separate benchmark measures recommendation latency on the 50 golden cases. A separate local study page collects timed manual and AI-assisted decisions from people without creating work orders. Study data is stored in its own SQLite file, keeping real participant feedback distinct from smoke-test scores. See the [measurement protocol](measurement.md) for the design and claim rules.
+
 The prototype assumes fictional data. Contact strings are redacted in trace payloads, but the LLM provider receives ticket text in live mode. Real deployment would require an approved data-handling design, stronger authentication, human-reviewed diagnostic content, and integration tests for actual work-order systems.
 
 ## Decision record
@@ -23,4 +25,5 @@ The prototype assumes fictional data. Contact strings are redacted in trace payl
 | DeepEval weekly | Separates response relevance, answer grounding, and retrieval recall on a category-balanced sample. | Local judge scores vary; humans still review failure samples. |
 | Langfuse sessions and scores | A supervisor's correction can be traced to the prompt, retrieval, model usage, and result. | Local Langfuse has multiple stateful services and needs Docker, storage, and maintenance. |
 | Streamlit playground | Keeps the colleague-facing interface in Python and supports side-by-side comparisons quickly. | Less design flexibility than a dedicated frontend. |
+| Separate timed operator study | Makes a human baseline and correction feedback measurable without mixing test clicks into operational feedback. | Requires actual participants; small voluntary samples cannot establish general impact. |
 | Fictional data | Makes the repo safe to publish as a portfolio example. | The labels and outcomes do not establish real-world performance. |

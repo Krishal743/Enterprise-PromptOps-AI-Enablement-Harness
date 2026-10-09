@@ -8,5 +8,7 @@ nav:
   - Workspace setup: workspace-setup.md
   - Local AI and observability: local-stack.md
   - Evaluation guide: evaluation.md
+  - Routing-time study: measurement.md
   - Architecture: architecture.md
   - Design specification: superpowers/specs/2026-10-08-ev-service-triage-design.md
+  - Measurement design: superpowers/specs/2026-10-09-routing-time-and-operator-feedback-design.md
